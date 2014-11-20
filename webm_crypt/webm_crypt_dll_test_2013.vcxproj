@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>webm_crypt_2013</ProjectName>
-    <ProjectGuid>{4E929267-2D86-4B4E-BCAA-2173D935DBB0}</ProjectGuid>
-    <RootNamespace>webm_crypt</RootNamespace>
+    <ProjectName>webm_crypt_dll_test_2013</ProjectName>
+    <ProjectGuid>{FF1B13FF-803B-49F8-B99B-D732CB2796CD}</ProjectGuid>
+    <RootNamespace>webm_crypt_dll_test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -65,7 +65,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>Dbghelp.lib;Ws2_32.lib;base.lib;base_static.lib;nss_static.lib;nss_static_avx.lib;crnss.lib;crnspr.lib;crcrypto.lib;dynamic_annotations.lib;sqlite3.lib;icudata.lib;icui18n.lib;icuuc.lib;libwebm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\lib\libwebm_2013\libwebm\Win32\Debug;$(CHROMIUM_INC)\out\Debug\obj\third_party\icu;$(CHROMIUM_INC)\out\Debug\obj\third_party\sqlite;$(CHROMIUM_INC)\out\Debug\obj\third_party\nss;$(CHROMIUM_INC)\out\Debug\obj\base\third_party\dynamic_annotations;$(CHROMIUM_INC)\out\Debug\obj\crypto;$(CHROMIUM_INC)\out\Debug\obj\base;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\lib\libwebm_2013\libwebm\Win32\Debug;$(CHROMIUM_INC)\out\Debug\obj\third_party\icu;$(CHROMIUM_INC)\out\Debug\obj\third_party\sqlite;$(CHROMIUM_INC)\out\Debug\obj\third_party\nss;$(CHROMIUM_INC)\out\Debug\obj\base\third_party\dynamic_annotations;$(CHROMIUM_INC)\out\Debug\obj\crypto;$(CHROMIUM_INC)\out\Debug\obj\base;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -87,7 +87,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>Dbghelp.lib;Ws2_32.lib;base.lib;base_static.lib;nss_static.lib;nss_static_avx.lib;crnss.lib;crnspr.lib;crcrypto.lib;dynamic_annotations.lib;sqlite3.lib;icudata.lib;icui18n.lib;icuuc.lib;libwebm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\lib\libwebm_2013\libwebm\Win32\Release;$(CHROMIUM_INC)\out\Release\obj\third_party\icu;$(CHROMIUM_INC)\out\Release\obj\third_party\sqlite;$(CHROMIUM_INC)\out\Release\obj\third_party\nss;$(CHROMIUM_INC)\out\Release\obj\base\third_party\dynamic_annotations;$(CHROMIUM_INC)\out\Release\obj\crypto;$(CHROMIUM_INC)\out\Release\obj\base;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\lib\libwebm_2013\libwebm\Win32\Release;$(CHROMIUM_INC)\out\Release\obj\third_party\icu;$(CHROMIUM_INC)\out\Release\obj\third_party\sqlite;$(CHROMIUM_INC)\out\Release\obj\third_party\nss;$(CHROMIUM_INC)\out\Release\obj\base\third_party\dynamic_annotations;$(CHROMIUM_INC)\out\Release\obj\crypto;$(CHROMIUM_INC)\out\Release\obj\base;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -97,10 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\webm_endian.cc" />
-    <ClCompile Include="webm_crypt.cc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Readme.txt" />
+    <ClCompile Include="webm_crypt_dll_test.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\shared\webm_endian.h" />

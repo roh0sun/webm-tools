@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webm_crypt_2013", "webm_crypt_2013.vcxproj", "{4E929267-2D86-4B4E-BCAA-2173D935DBB0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webm_crypt_dll_2013", "webm_crypt_dll_2013.vcxproj", "{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webm_crypt_dll_test_2013", "webm_crypt_dll_test_2013.vcxproj", "{FF1B13FF-803B-49F8-B99B-D732CB2796CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +19,14 @@ Global
 		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.Debug|Win32.Build.0 = Debug|Win32
 		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.Release|Win32.ActiveCfg = Release|Win32
 		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.Release|Win32.Build.0 = Release|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Debug|Win32.Build.0 = Debug|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Release|Win32.ActiveCfg = Release|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Release|Win32.Build.0 = Release|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Debug|Win32.Build.0 = Debug|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Release|Win32.ActiveCfg = Release|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
