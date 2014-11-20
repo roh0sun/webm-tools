@@ -190,7 +190,7 @@ bool EncryptModule::ProcessData(const uint8* plaintext, size_t size,
     // Set the IV.
     const uint64 iv = next_iv_++;
 
-    const string iv_str(reinterpret_cast<const char*>(&iv), sizeof(iv));
+	const string iv_str(reinterpret_cast<const char*>(&iv), EncryptModule::kIVSize);
     string counter_block;
     if (!GenerateCounterBlock(iv_str, &counter_block)) {
       fprintf(stderr, "Could not generate counter block.\n");
@@ -211,13 +211,13 @@ bool EncryptModule::ProcessData(const uint8* plaintext, size_t size,
     }
 
     // Prepend the IV.
-    cipher_temp_size += sizeof(iv);
+	cipher_temp_size += EncryptModule::kIVSize;
     cipher_temp.reset(new (std::nothrow) uint8[cipher_temp_size]);  // NOLINT
     if (!cipher_temp.get())
       return false;
 
-    memcpy(cipher_temp.get() + kSignalByteSize, &iv, sizeof(iv));
-    memcpy(cipher_temp.get() + sizeof(iv) + kSignalByteSize,
+	memcpy(cipher_temp.get() + kSignalByteSize, &iv, EncryptModule::kIVSize);
+	memcpy(cipher_temp.get() + EncryptModule::kIVSize + kSignalByteSize,
            encrypted_text.data(), encrypted_text.size());
   } else {
     cipher_temp.reset(new (std::nothrow) uint8[cipher_temp_size]);  // NOLINT
@@ -341,7 +341,7 @@ bool DecryptModule::DecryptData(const uint8* data, size_t length,
         return false;
       }
 
-      const size_t offset = EncryptModule::kSignalByteSize + sizeof(iv);
+	  const size_t offset = EncryptModule::kSignalByteSize + EncryptModule::kIVSize;
       // Skip past the IV.
       const string encryptedtext(
           reinterpret_cast<const char*>(data + offset),
@@ -1465,25 +1465,25 @@ bool CheckEncryptionOptions(const string& name,
 
 }  // namespace
 
-// These values are not getting compiled into base.lib.
-namespace switches {
-
-// Gives the default maximal active V-logging level; 0 is the default.
-// Normally positive values are used for V-logging levels.
-const char kV[]                             = "v";
-
-// Gives the per-module maximal V-logging levels to override the value
-// given by --v.  E.g. "my_module=2,foo*=3" would change the logging
-// level for all code in source files "my_module.*" and "foo*.*"
-// ("-inl" suffixes are also disregarded for this matching).
+//// These values are not getting compiled into base.lib.
+//namespace switches {
 //
-// Any pattern containing a forward or backward slash will be tested
-// against the whole pathname and not just the module.  E.g.,
-// "*/foo/bar/*=2" would change the logging level for all code in
-// source files under a "foo/bar" directory.
-const char kVModule[]                       = "vmodule";
-
-}  // namespace switches
+//// Gives the default maximal active V-logging level; 0 is the default.
+//// Normally positive values are used for V-logging levels.
+//const char kV[]                             = "v";
+//
+//// Gives the per-module maximal V-logging levels to override the value
+//// given by --v.  E.g. "my_module=2,foo*=3" would change the logging
+//// level for all code in source files "my_module.*" and "foo*.*"
+//// ("-inl" suffixes are also disregarded for this matching).
+////
+//// Any pattern containing a forward or backward slash will be tested
+//// against the whole pathname and not just the module.  E.g.,
+//// "*/foo/bar/*=2" would change the logging level for all code in
+//// source files under a "foo/bar" directory.
+//const char kVModule[]                       = "vmodule";
+//
+//}  // namespace switches
 
 int main(int argc, char* argv[]) {
   WebMCryptSettings webm_crypt_settings;
