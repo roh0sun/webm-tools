@@ -27,9 +27,9 @@ static bool GenerateCounterBlock(const std::string& iv, std::string* counter_blo
 	return true;
 }
 
-WebmDecryptModule* WebmDecryptModule::Create(const EncryptionSettings& enc, const std::string& secret)
+WebmDecryptModule* WebmDecryptModule::Create(const std::string& secret)
 {
-	return new WebmDecryptModule(enc, secret);
+	return new WebmDecryptModule(secret);
 }
 
 void WebmDecryptModule::Destroy(WebmDecryptModule* instance)
@@ -37,9 +37,8 @@ void WebmDecryptModule::Destroy(WebmDecryptModule* instance)
 	delete instance;
 }
 
-WebmDecryptModule::WebmDecryptModule(const EncryptionSettings& enc, const std::string& secret)
+WebmDecryptModule::WebmDecryptModule(const std::string& secret)
 	: do_not_decrypt_(false)
-	, enc_(enc)
 {
 	encryptor_.reset(new Encryptor);
 	key_.reset(SymmetricKey::Import(SymmetricKey::AES, secret));

@@ -11,11 +11,11 @@ namespace webm_crypt_dll {
 	class WebmEncryptModule
 	{
 	protected:
-		WebmEncryptModule(const EncryptionSettings& enc, const std::string& secret);
+		WebmEncryptModule(const std::string& secret, uint64_t initial_iv);
 		~WebmEncryptModule();
 
 	public:
-		WECAPI static WebmEncryptModule* Create(const EncryptionSettings& enc, const std::string& secret);
+		WECAPI static WebmEncryptModule* Create(const std::string& secret, uint64_t initial_iv);
 		WECAPI static void Destroy(WebmEncryptModule* instance);
 		WECAPI bool Init();
 		WECAPI bool ProcessData(const uint8_t* plaintext, size_t size, uint8_t* ciphertext, size_t* ciphertext_size);
@@ -24,7 +24,6 @@ namespace webm_crypt_dll {
 
 	private:
 		bool do_not_encrypt_;
-		const EncryptionSettings enc_;
 		std::unique_ptr<crypto::SymmetricKey> key_;
 		uint64_t next_iv_;
 		std::string error_message_;

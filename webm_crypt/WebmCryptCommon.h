@@ -14,31 +14,17 @@
 
 namespace webm_crypt_dll {
 
-	// Struct to hold encryption settings for a single WebM stream.
 	struct EncryptionSettings {
 		EncryptionSettings()
-			: base_secret_file()
-			, cipher_mode("CTR")
+			: cipher_mode("CTR")
 			, content_id()
-			, initial_iv(0)
-			, unencrypted_range(0) {
+			, initial_iv(0) {
 		}
 
-		// Path to a file which holds the base secret.
 		std::string base_secret_file;
-
-		// AES encryption algorithm. Currently only "CTR" is supported.
 		std::string cipher_mode;
-
-		// WebM Content ID element.
 		std::string content_id;
-
-		// Initial Initialization Vector for encryption.
 		uint64_t initial_iv;
-
-		// Do not encrypt frames that have a start time less than
-		// |unencrypted_range| in milliseconds.
-		int64_t unencrypted_range;
 	};
 
 	static const size_t kDefaultContentIDSize = 16;

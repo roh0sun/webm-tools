@@ -12,11 +12,11 @@ namespace webm_crypt_dll {
 	class WebmDecryptModule
 	{
 	protected:
-		WebmDecryptModule(const EncryptionSettings& enc, const std::string& secret);
+		WebmDecryptModule(const std::string& secret);
 		~WebmDecryptModule();
 
 	public:
-		WECAPI static WebmDecryptModule* Create(const EncryptionSettings& enc, const std::string& secret);
+		WECAPI static WebmDecryptModule* Create(const std::string& secret);
 		WECAPI static void Destroy(WebmDecryptModule* instance);
 		WECAPI bool Init();
 		WECAPI bool DecryptData(const uint8_t* data, size_t length, uint8_t* plaintext, size_t* plaintext_size);
@@ -25,7 +25,7 @@ namespace webm_crypt_dll {
 
 	private:
 		bool do_not_decrypt_;
-		const EncryptionSettings enc_;
+		std::string base_secret_file_;
 		std::unique_ptr<crypto::SymmetricKey> key_;
 		std::unique_ptr<crypto::Encryptor> encryptor_;
 		std::string error_message_;

@@ -27,9 +27,9 @@ static bool GenerateCounterBlock(const std::string& iv, std::string* counter_blo
 	return true;
 }
 
-WebmEncryptModule* WebmEncryptModule::Create(const EncryptionSettings& enc, const std::string& secret)
+WebmEncryptModule* WebmEncryptModule::Create(const std::string& secret, uint64_t initial_iv)
 {
-	return new WebmEncryptModule(enc, secret);
+	return new WebmEncryptModule(secret, initial_iv);
 }
 
 void WebmEncryptModule::Destroy(WebmEncryptModule* instance)
@@ -37,10 +37,9 @@ void WebmEncryptModule::Destroy(WebmEncryptModule* instance)
 	delete instance;
 }
 
-WebmEncryptModule::WebmEncryptModule(const EncryptionSettings& enc, const std::string& secret)
+WebmEncryptModule::WebmEncryptModule(const std::string& secret, uint64_t initial_iv)
 	: do_not_encrypt_(false)
-	, enc_(enc)
-	, next_iv_(enc.initial_iv)
+	, next_iv_(initial_iv)
 {
 	key_.reset(SymmetricKey::Import(SymmetricKey::AES, secret));
 }
@@ -71,7 +70,7 @@ bool WebmEncryptModule::ProcessData(const uint8_t* plaintext, size_t size, uint8
 
 	size_t cipher_temp_size = size + kSignalByteSize;
 
-	if (do_not_encrypt_)
+	if (!do_not_encrypt_)
 	{
 		Encryptor encryptor;
 		if (!encryptor.Init(key_.get(), Encryptor::CTR, "")) {
@@ -129,7 +128,7 @@ bool WebmEncryptModule::ProcessData(const uint8_t* plaintext, size_t size, uint8
 		memcpy(ciphertext + kSignalByteSize, reinterpret_cast<const char*>(plaintext), size);
 	}
 
-	const uint8 signal_byte = do_not_encrypt_ ? kEncryptedFrame : 0;
+	const uint8 signal_byte = do_not_encrypt_ ? 0 : kEncryptedFrame;
 	ciphertext[0] = signal_byte;
 	*ciphertext_size = cipher_temp_size;
 

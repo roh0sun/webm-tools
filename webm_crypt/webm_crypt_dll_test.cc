@@ -581,14 +581,14 @@ namespace {
 		scoped_ptr<uint8[]> encrypted_data;
 		size_t encrypted_data_len = 0;
 
-		WebmEncryptModulePtr audio_encryptor(WebmEncryptModule::Create(webm_crypt.aud_enc, aud_base_secret));
+		WebmEncryptModulePtr audio_encryptor(WebmEncryptModule::Create(aud_base_secret, webm_crypt.aud_enc.initial_iv));
 		if (webm_crypt.audio && !audio_encryptor->Init()) {
 			fprintf(stderr, "Could not initialize audio encryptor.\n");
 			return -1;
 		}
 		audio_encryptor->set_do_not_encrypt(webm_crypt.no_encryption);
 
-		WebmEncryptModulePtr video_encryptor(WebmEncryptModule::Create(webm_crypt.vid_enc, vid_base_secret));
+		WebmEncryptModulePtr video_encryptor(WebmEncryptModule::Create(vid_base_secret, webm_crypt.vid_enc.initial_iv));
 		if (webm_crypt.video && !video_encryptor->Init()) {
 			fprintf(stderr, "Could not initialize video encryptor.\n");
 			return -1;
@@ -907,14 +907,14 @@ namespace {
 		int data_len = 0;
 		scoped_ptr<uint8[]> decrypted_data;
 		int decrypted_data_len = 0;
-		WebmDecryptModulePtr audio_decryptor(WebmDecryptModule::Create(aud_enc, aud_base_secret));
+		WebmDecryptModulePtr audio_decryptor(WebmDecryptModule::Create(aud_base_secret));
 		audio_decryptor->set_do_not_decrypt(webm_crypt.no_encryption);
 		if (decrypt_audio && !audio_decryptor->Init()) {
 			fprintf(stderr, "Could not initialize audio decryptor.\n");
 			return -1;
 		}
 
-		WebmDecryptModulePtr video_decryptor(WebmDecryptModule::Create(vid_enc, vid_base_secret));
+		WebmDecryptModulePtr video_decryptor(WebmDecryptModule::Create(vid_base_secret));
 		video_decryptor->set_do_not_decrypt(webm_crypt.no_encryption);
 		if (decrypt_video && !video_decryptor->Init()) {
 			fprintf(stderr, "Could not initialize video decryptor.\n");
