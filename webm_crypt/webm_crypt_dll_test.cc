@@ -968,7 +968,7 @@ namespace {
 						if ((track_type == mkvparser::Track::kVideo && decrypt_video) ||
 							(track_type == mkvparser::Track::kAudio && decrypt_audio)) {
 							if (track_type == mkvparser::Track::kAudio) {
-								if (!audio_decryptor->DecryptData(data.get(),
+								if (!audio_decryptor->ProcessData(data.get(),
 									frame.len,
 									decrypted_data.get(),
 									&decrypted_len)) {
@@ -977,7 +977,7 @@ namespace {
 								}
 							}
 							else {
-								if (!video_decryptor->DecryptData(data.get(),
+								if (!video_decryptor->ProcessData(data.get(),
 									frame.len,
 									decrypted_data.get(),
 									&decrypted_len)) {

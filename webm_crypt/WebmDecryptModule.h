@@ -19,7 +19,7 @@ namespace webm_crypt_dll {
 		WECAPI static WebmDecryptModule* Create(const std::string& secret);
 		WECAPI static void Destroy(WebmDecryptModule* instance);
 		WECAPI bool Init();
-		WECAPI bool DecryptData(const uint8_t* data, size_t length, uint8_t* plaintext, size_t* plaintext_size);
+		WECAPI bool ProcessData(const uint8_t* data, size_t length, uint8_t* plaintext, size_t* plaintext_size);
 		WECAPI void set_do_not_decrypt(bool flag);
 		WECAPI const char* GetError();
 

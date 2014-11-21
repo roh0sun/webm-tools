@@ -69,7 +69,7 @@ bool WebmDecryptModule::Init()
 	return true;
 }
 
-bool WebmDecryptModule::DecryptData(const uint8* data, size_t length, uint8_t* plaintext, size_t* plaintext_size)
+bool WebmDecryptModule::ProcessData(const uint8* data, size_t length, uint8_t* plaintext, size_t* plaintext_size)
 {
 	if (!plaintext || !plaintext_size)
 	{
