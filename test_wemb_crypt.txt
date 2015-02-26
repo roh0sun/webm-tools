@@ -1,0 +1,5 @@
+webm_crypt_dll_test_2013.exe -i C:\webrtc\oortc-win\Release\RTC20150225_201230.webm -o C:\webrtc\oortc-win\Release\RTC20150225_201230_enc.webm -audio true -video true -audio_options initial_iv=1 -video_options initial_iv=1
+
+webm_crypt_dll_test_2013.exe -i C:\webrtc\oortc-win\Release\RTC20150225_201230_enc.webm -o C:\webrtc\oortc-win\Release\RTC20150225_201230_dec.webm -audio true -video true -audio_options initial_iv=1,base_file=C:\webrtc\webm_enc\webm-tools\webm_crypt\Debug\aud_base_secret.key -video_options initial_iv=1,base_file=C:\webrtc\webm_enc\webm-tools\webm_crypt\Debug\vid_base_secret.key -decrypt
+
+webm_crypt_dll_test_2013.exe -i C:\webrtc\oortc-win\Debug\RTC20141121_161746.webm -o C:\webrtc\oortc-win\Debug\RTC20141121_161746_dec.webm -audio true -video true -audio_options initial_iv=1,base_file=C:\webrtc\oortc-win\Debug\base_secret.key -video_options initial_iv=1,base_file=C:\webrtc\oortc-win\Debug\base_secret.key -decrypt

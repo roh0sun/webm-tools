@@ -6,27 +6,54 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webm_crypt_2013", "webm_crypt_2013.vcxproj", "{4E929267-2D86-4B4E-BCAA-2173D935DBB0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webm_crypt_dll_2013", "webm_crypt_dll_2013.vcxproj", "{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9} = {83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webm_crypt_dll_test_2013", "webm_crypt_dll_test_2013.vcxproj", "{FF1B13FF-803B-49F8-B99B-D732CB2796CD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryptlib", "..\cryptopp562\cryptlib.vcxproj", "{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		DLL-Import Debug|Win32 = DLL-Import Debug|Win32
+		DLL-Import Release|Win32 = DLL-Import Release|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.Debug|Win32.Build.0 = Debug|Win32
+		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.DLL-Import Debug|Win32.ActiveCfg = Debug|Win32
+		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.DLL-Import Debug|Win32.Build.0 = Debug|Win32
+		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.DLL-Import Release|Win32.ActiveCfg = Release|Win32
+		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.DLL-Import Release|Win32.Build.0 = Release|Win32
 		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.Release|Win32.ActiveCfg = Release|Win32
 		{4E929267-2D86-4B4E-BCAA-2173D935DBB0}.Release|Win32.Build.0 = Release|Win32
 		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Debug|Win32.ActiveCfg = Debug|Win32
 		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Debug|Win32.Build.0 = Debug|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.DLL-Import Debug|Win32.ActiveCfg = Debug|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.DLL-Import Debug|Win32.Build.0 = Debug|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.DLL-Import Release|Win32.ActiveCfg = Release|Win32
+		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.DLL-Import Release|Win32.Build.0 = Release|Win32
 		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Release|Win32.ActiveCfg = Release|Win32
 		{7C30E159-1D0E-4AD3-87AA-45923E19CCD9}.Release|Win32.Build.0 = Release|Win32
 		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Debug|Win32.Build.0 = Debug|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.DLL-Import Debug|Win32.ActiveCfg = Debug|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.DLL-Import Debug|Win32.Build.0 = Debug|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.DLL-Import Release|Win32.ActiveCfg = Release|Win32
+		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.DLL-Import Release|Win32.Build.0 = Release|Win32
 		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Release|Win32.ActiveCfg = Release|Win32
 		{FF1B13FF-803B-49F8-B99B-D732CB2796CD}.Release|Win32.Build.0 = Release|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.Debug|Win32.Build.0 = Debug|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.DLL-Import Debug|Win32.ActiveCfg = DLL-Import Debug|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.DLL-Import Debug|Win32.Build.0 = DLL-Import Debug|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.DLL-Import Release|Win32.ActiveCfg = DLL-Import Release|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.DLL-Import Release|Win32.Build.0 = DLL-Import Release|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.Release|Win32.ActiveCfg = Release|Win32
+		{83C2FB6D-A00D-48A7-A7F9-E4C309C2A0C9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

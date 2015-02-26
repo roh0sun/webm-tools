@@ -1,10 +1,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <memory>
 
-#include "base/base_switches.h"
-#include "base/basictypes.h"
-#include "base/memory/scoped_ptr.h"
 #include "mkvmuxer.hpp"
 #include "mkvmuxerutil.hpp"
 #include "mkvparser.hpp"
@@ -21,6 +19,7 @@
 namespace {
 
 	using std::string;
+	using std::unique_ptr;
 	using mkvparser::ContentEncoding;
 	using namespace webm_crypt_dll;
 
@@ -100,13 +99,13 @@ namespace {
 		printf("  \n");
 		printf("-audio_options <string> Comma separated name value pair.\n");
 		printf("  content_id=<string>   Encryption content ID. (Default empty)\n");
-		printf("  initial_iv=<uint64>   Initial IV value. (Default random)\n");
+		printf("  initial_iv=<uint64_t>   Initial IV value. (Default random)\n");
 		printf("  base_file=<string>    Path to base secret file. (Default\n");
 		printf("                        empty)\n");
 		printf("  \n");
 		printf("-video_options <string> Comma separated name value pair.\n");
 		printf("  content_id=<string>   Encryption content ID. (Default empty)\n");
-		printf("  initial_iv=<uint64>   Initial IV value. (Default random)\n");
+		printf("  initial_iv=<uint64_t>   Initial IV value. (Default random)\n");
 		printf("  base_file=<string>    Path to base secret file. (Default\n");
 		printf("                        empty)\n");
 	}
@@ -120,9 +119,9 @@ namespace {
 	bool OpenWebMFiles(const string& input,
 		const string& output,
 		mkvparser::MkvReader* reader,
-		scoped_ptr<mkvparser::Segment>* parser,
+		unique_ptr<mkvparser::Segment>* parser,
 		mkvmuxer::MkvWriter* writer,
-		scoped_ptr<mkvmuxer::Segment>* muxer) {
+		unique_ptr<mkvmuxer::Segment>* muxer) {
 		if (!reader || !parser || !writer || !muxer)
 			return false;
 
@@ -139,7 +138,7 @@ namespace {
 		}
 
 		mkvparser::Segment* parser_segment;
-		int64 ret = mkvparser::Segment::CreateInstance(reader, pos, parser_segment);
+		int64_t ret = mkvparser::Segment::CreateInstance(reader, pos, parser_segment);
 		if (ret) {
 			fprintf(stderr, "Segment::CreateInstance() failed.");
 			return false;
@@ -153,7 +152,7 @@ namespace {
 		}
 
 		const mkvparser::SegmentInfo* const segment_info = (*parser)->GetInfo();
-		const int64 timeCodeScale = segment_info->GetTimeCodeScale();
+		const int64_t timeCodeScale = segment_info->GetTimeCodeScale();
 
 		// Set muxer header info
 		if (!writer->Open(output.c_str())) {
@@ -190,7 +189,7 @@ namespace {
 		const int key_size = ftell(f);
 		fseek(f, 0, SEEK_SET);
 
-		scoped_ptr<char[]> raw_key_buf(new (std::nothrow) char[key_size]);  // NOLINT
+		unique_ptr<char[]> raw_key_buf(new (std::nothrow) char[key_size]);  // NOLINT
 		const int bytes_read = fread(raw_key_buf.get(), 1, key_size, f);
 		fclose(f);
 
@@ -235,7 +234,7 @@ namespace {
 				}
 			}
 		}
-		uint8 random_secret[kKeySize];
+		uint8_t random_secret[kKeySize];
 		if (!GenerateRandomData(kKeySize, random_secret)) {
 			fprintf(stderr, "Error generating base secret data.\n");
 			return false;
@@ -361,8 +360,8 @@ namespace {
 	int WebMEncrypt(const WebMCryptSettings& webm_crypt) {
 		mkvparser::MkvReader reader;
 		mkvmuxer::MkvWriter writer;
-		scoped_ptr<mkvparser::Segment> parser_segment;
-		scoped_ptr<mkvmuxer::Segment> muxer_segment;
+		unique_ptr<mkvparser::Segment> parser_segment;
+		unique_ptr<mkvmuxer::Segment> muxer_segment;
 		const bool b = OpenWebMFiles(webm_crypt.input,
 			webm_crypt.output,
 			&reader,
@@ -376,9 +375,9 @@ namespace {
 
 		// Set Tracks element attributes
 		const mkvparser::Tracks* const parser_tracks = parser_segment->GetTracks();
-		uint32 i = 0;
-		uint64 vid_track = 0;  // no track added
-		uint64 aud_track = 0;  // no track added
+		uint32_t i = 0;
+		uint64_t vid_track = 0;  // no track added
+		uint64_t aud_track = 0;  // no track added
 		string aud_base_secret;
 		string vid_base_secret;
 
@@ -392,14 +391,14 @@ namespace {
 				continue;
 
 			const char* const track_name = parser_track->GetNameAsUTF8();
-			const int64 track_type = parser_track->GetType();
+			const int64_t track_type = parser_track->GetType();
 
 			if (track_type == mkvparser::Track::kVideo) {
 				// Get the video track from the parser
 				const mkvparser::VideoTrack* const pVideoTrack =
 					reinterpret_cast<const mkvparser::VideoTrack*>(parser_track);
-				const int64 width = pVideoTrack->GetWidth();
-				const int64 height = pVideoTrack->GetHeight();
+				const int64_t width = pVideoTrack->GetWidth();
+				const int64_t height = pVideoTrack->GetHeight();
 
 				// Add the video track to the muxer. 0 tells muxer to decide on track
 				// number.
@@ -469,7 +468,7 @@ namespace {
 						std::copy(random_id, random_id + kDefaultContentIDSize, std::back_inserter(id));
 					}
 					if (!encoding->SetEncryptionID(
-						reinterpret_cast<const uint8*>(id.data()), id.size())) {
+						reinterpret_cast<const uint8_t*>(id.data()), id.size())) {
 						fprintf(stderr, "Could not set encryption id for video track.\n");
 						return -1;
 					}
@@ -479,7 +478,7 @@ namespace {
 				// Get the audio track from the parser
 				const mkvparser::AudioTrack* const pAudioTrack =
 					reinterpret_cast<const mkvparser::AudioTrack*>(parser_track);
-				const int64 channels = pAudioTrack->GetChannels();
+				const int64_t channels = pAudioTrack->GetChannels();
 				const double sample_rate = pAudioTrack->GetSamplingRate();
 
 				// Add the audio track to the muxer. 0 tells muxer to decide on track
@@ -511,7 +510,7 @@ namespace {
 					audio->set_seek_pre_roll(pAudioTrack->GetSeekPreRoll());
 
 				size_t private_size;
-				const uint8* const private_data =
+				const uint8_t* const private_data =
 					pAudioTrack->GetCodecPrivate(private_size);
 				if (private_size > 0) {
 					if (!audio->SetCodecPrivate(private_data, private_size)) {
@@ -520,7 +519,7 @@ namespace {
 					}
 				}
 
-				const int64 bit_depth = pAudioTrack->GetBitDepth();
+				const int64_t bit_depth = pAudioTrack->GetBitDepth();
 				if (bit_depth > 0)
 					audio->set_bit_depth(bit_depth);
 
@@ -564,7 +563,7 @@ namespace {
 						std::copy(random_id, random_id + kDefaultContentIDSize, std::back_inserter(id));
 					}
 					if (!encoding->SetEncryptionID(
-						reinterpret_cast<const uint8*>(id.data()), id.size())) {
+						reinterpret_cast<const uint8_t*>(id.data()), id.size())) {
 						fprintf(stderr, "Could not set encryption id for video track.\n");
 						return -1;
 					}
@@ -576,9 +575,9 @@ namespace {
 		muxer_segment->CuesTrack(vid_track);
 
 		// Write clusters
-		scoped_ptr<uint8[]> data;
+		unique_ptr<uint8_t[]> data;
 		int data_len = 0;
-		scoped_ptr<uint8[]> encrypted_data;
+		unique_ptr<uint8_t[]> encrypted_data;
 		size_t encrypted_data_len = 0;
 
 		WebmEncryptModulePtr audio_encryptor(WebmEncryptModule::Create(aud_base_secret, webm_crypt.aud_enc.initial_iv));
@@ -605,22 +604,22 @@ namespace {
 
 			while ((block_entry != NULL) && !block_entry->EOS()) {
 				const mkvparser::Block* const block = block_entry->GetBlock();
-				const int64 trackNum = block->GetTrackNumber();
+				const int64_t trackNum = block->GetTrackNumber();
 				const mkvparser::Track* const parser_track =
-					parser_tracks->GetTrackByNumber(static_cast<uint32>(trackNum));
-				const int64 track_type = parser_track->GetType();
+					parser_tracks->GetTrackByNumber(static_cast<uint32_t>(trackNum));
+				const int64_t track_type = parser_track->GetType();
 
 				if ((track_type == mkvparser::Track::kAudio) ||
 					(track_type == mkvparser::Track::kVideo)) {
 					const int frame_count = block->GetFrameCount();
-					const int64 time_ns = block->GetTime(cluster);
+					const int64_t time_ns = block->GetTime(cluster);
 					const bool is_key = block->IsKey();
 
 					for (int i = 0; i < frame_count; ++i) {
 						const mkvparser::Block::Frame& frame = block->GetFrame(i);
 
 						if (frame.len > data_len) {
-							data.reset(new (std::nothrow) uint8[frame.len]);  // NOLINT
+							data.reset(new (std::nothrow) uint8_t[frame.len]);  // NOLINT
 							if (!data.get())
 								return -1;
 							data_len = frame.len;
@@ -630,7 +629,7 @@ namespace {
 							return -1;
 
 						if (frame.len + kSignalByteSize + kIVSize > encrypted_data_len) {
-							encrypted_data.reset(new (std::nothrow) uint8[frame.len + kSignalByteSize + kIVSize]);
+							encrypted_data.reset(new (std::nothrow) uint8_t[frame.len + kSignalByteSize + kIVSize]);
 							if (!encrypted_data.get())
 								return -1;
 							encrypted_data_len = frame.len + kSignalByteSize + kIVSize;
@@ -641,7 +640,7 @@ namespace {
 							prev_cluster = cluster;
 						}
 
-						const uint64 track_num =
+						const uint64_t track_num =
 							(track_type == mkvparser::Track::kAudio) ? aud_track : vid_track;
 
 						if ((track_type == mkvparser::Track::kVideo && webm_crypt.video) ||
@@ -725,8 +724,8 @@ namespace {
 	int WebMDecrypt(const WebMCryptSettings& webm_crypt) {
 		mkvparser::MkvReader reader;
 		mkvmuxer::MkvWriter writer;
-		scoped_ptr<mkvparser::Segment> parser_segment;
-		scoped_ptr<mkvmuxer::Segment> muxer_segment;
+		unique_ptr<mkvparser::Segment> parser_segment;
+		unique_ptr<mkvmuxer::Segment> muxer_segment;
 		const bool b = OpenWebMFiles(webm_crypt.input,
 			webm_crypt.output,
 			&reader,
@@ -740,9 +739,9 @@ namespace {
 
 		// Set Tracks element attributes
 		const mkvparser::Tracks* const parser_tracks = parser_segment->GetTracks();
-		uint32 i = 0;
-		uint64 vid_track = 0;  // no track added
-		uint64 aud_track = 0;  // no track added
+		uint32_t i = 0;
+		uint64_t vid_track = 0;  // no track added
+		uint64_t aud_track = 0;  // no track added
 		EncryptionSettings aud_enc;
 		EncryptionSettings vid_enc;
 		bool decrypt_video = false;
@@ -760,14 +759,14 @@ namespace {
 				continue;
 
 			const char* const track_name = parser_track->GetNameAsUTF8();
-			const int64 track_type = parser_track->GetType();
+			const int64_t track_type = parser_track->GetType();
 
 			if (track_type == mkvparser::Track::kVideo) {
 				// Get the video track from the parser
 				const mkvparser::VideoTrack* const pVideoTrack =
 					reinterpret_cast<const mkvparser::VideoTrack*>(parser_track);
-				const int64 width = pVideoTrack->GetWidth();
-				const int64 height = pVideoTrack->GetHeight();
+				const int64_t width = pVideoTrack->GetWidth();
+				const int64_t height = pVideoTrack->GetHeight();
 
 				// Add the video track to the muxer. 0 tells muxer to decide on track
 				// number.
@@ -827,7 +826,7 @@ namespace {
 				// Get the audio track from the parser
 				const mkvparser::AudioTrack* const pAudioTrack =
 					reinterpret_cast<const mkvparser::AudioTrack*>(parser_track);
-				const int64 channels = pAudioTrack->GetChannels();
+				const int64_t channels = pAudioTrack->GetChannels();
 				const double sample_rate = pAudioTrack->GetSamplingRate();
 
 				// Add the audio track to the muxer. 0 tells muxer to decide on track
@@ -859,7 +858,7 @@ namespace {
 					audio->set_seek_pre_roll(pAudioTrack->GetSeekPreRoll());
 
 				size_t private_size;
-				const uint8* const private_data =
+				const uint8_t* const private_data =
 					pAudioTrack->GetCodecPrivate(private_size);
 				if (private_size > 0) {
 					if (!audio->SetCodecPrivate(private_data, private_size)) {
@@ -868,7 +867,7 @@ namespace {
 					}
 				}
 
-				const int64 bit_depth = pAudioTrack->GetBitDepth();
+				const int64_t bit_depth = pAudioTrack->GetBitDepth();
 				if (bit_depth > 0)
 					audio->set_bit_depth(bit_depth);
 
@@ -903,9 +902,9 @@ namespace {
 		muxer_segment->CuesTrack(vid_track);
 
 		// Write clusters
-		scoped_ptr<uint8[]> data;
+		unique_ptr<uint8_t[]> data;
 		int data_len = 0;
-		scoped_ptr<uint8[]> decrypted_data;
+		unique_ptr<uint8_t[]> decrypted_data;
 		int decrypted_data_len = 0;
 		WebmDecryptModulePtr audio_decryptor(WebmDecryptModule::Create(aud_base_secret));
 		audio_decryptor->set_do_not_decrypt(webm_crypt.no_encryption);
@@ -930,22 +929,22 @@ namespace {
 
 			while ((block_entry != NULL) && !block_entry->EOS()) {
 				const mkvparser::Block* const block = block_entry->GetBlock();
-				const int64 trackNum = block->GetTrackNumber();
+				const int64_t trackNum = block->GetTrackNumber();
 				const mkvparser::Track* const parser_track =
-					parser_tracks->GetTrackByNumber(static_cast<uint32>(trackNum));
-				const int64 track_type = parser_track->GetType();
+					parser_tracks->GetTrackByNumber(static_cast<uint32_t>(trackNum));
+				const int64_t track_type = parser_track->GetType();
 
 				if ((track_type == mkvparser::Track::kAudio) ||
 					(track_type == mkvparser::Track::kVideo)) {
 					const int frame_count = block->GetFrameCount();
-					const int64 time_ns = block->GetTime(cluster);
+					const int64_t time_ns = block->GetTime(cluster);
 					const bool is_key = block->IsKey();
 
 					for (int i = 0; i < frame_count; ++i) {
 						const mkvparser::Block::Frame& frame = block->GetFrame(i);
 
 						if (frame.len > data_len) {
-							data.reset(new (std::nothrow) uint8[frame.len]);  // NOLINT
+							data.reset(new (std::nothrow) uint8_t[frame.len]);  // NOLINT
 							if (!data.get())
 								return -1;
 							data_len = frame.len;
@@ -955,13 +954,13 @@ namespace {
 							return -1;
 
 						if (frame.len > decrypted_data_len) {
-							decrypted_data.reset(new (std::nothrow) uint8[frame.len]);
+							decrypted_data.reset(new (std::nothrow) uint8_t[frame.len]);
 							if (!decrypted_data.get())
 								return -1;
 							decrypted_data_len = frame.len;
 						}
 
-						const uint64 track_num =
+						const uint64_t track_num =
 							(track_type == mkvparser::Track::kAudio) ? aud_track : vid_track;
 
 						size_t decrypted_len = decrypted_data_len;
